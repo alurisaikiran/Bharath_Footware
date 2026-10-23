@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bharath Footwear | Step Into Tradition</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#home" class="nav-logo">
+        <span class="logo-icon">&#9670;</span> Bharath Footwear
+      </a>
+      <nav class="nav-links">
+        <a href="#about">About</a>
+        <a href="#collections">Collections</a>
+        <a href="#features">Why Us</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#about" onclick="closeMobileMenu()">About</a>
+      <a href="#collections" onclick="closeMobileMenu()">Collections</a>
+      <a href="#features" onclick="closeMobileMenu()">Why Us</a>
+      <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-tag">Crafted in India since 1985</p>
+      <h1 class="hero-title">Step Into<br /><span class="highlight">Tradition &amp; Style</span></h1>
+      <p class="hero-sub">Premium handcrafted footwear blending age-old artistry with modern comfort. Every pair tells a story.</p>
+      <div class="hero-buttons">
+        <a href="#collections" class="btn btn-primary">Explore Collections</a>
+        <a href="#contact" class="btn btn-outline">Get In Touch</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll Down</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <section class="stats-strip">
+    <div class="stat">
+      <span class="stat-num">40+</span>
+      <span class="stat-label">Years of Craft</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">500+</span>
+      <span class="stat-label">Unique Designs</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">50K+</span>
+      <span class="stat-label">Happy Customers</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">12</span>
+      <span class="stat-label">States Served</span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image">
+          <div class="image-card">
+            <div class="img-placeholder about-img-placeholder">
+              <span class="placeholder-icon">&#128736;</span>
+              <p>Artisan at Work</p>
+            </div>
+            <div class="image-badge">Est. 1985</div>
+          </div>
+        </div>
+        <div class="about-text">
+          <p class="section-tag">Our Story</p>
+          <h2 class="section-title">Rooted in Heritage,<br />Made for Today</h2>
+          <p>Bharath Footwear was born from a single craftsman's dream in Chennai — to create footwear that honors India's rich leatherworking tradition while meeting the demands of the modern world.</p>
+          <p>Today, our family-run workshops employ over 120 skilled artisans who hand-stitch every pair using time-honored techniques passed down through generations. We source premium leathers locally, supporting Indian farmers and tanners.</p>
+          <div class="about-values">
+            <div class="value-item">
+              <span class="value-icon">&#10003;</span> 100% Genuine Leather
+            </div>
+            <div class="value-item">
+              <span class="value-icon">&#10003;</span> Handcrafted by Artisans
+            </div>
+            <div class="value-item">
+              <span class="value-icon">&#10003;</span> Made in India
+            </div>
+            <div class="value-item">
+              <span class="value-icon">&#10003;</span> 1-Year Craftsmanship Guarantee
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLECTIONS -->
+  <section class="collections" id="collections">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-tag">Our Range</p>
+        <h2 class="section-title">Explore Collections</h2>
+        <p class="section-desc">From traditional Kolhapuris to everyday comfort wear — we have something for every occasion.</p>
+      </div>
+      <div class="product-grid">
+
+        <div class="product-card" data-category="Men">
+          <div class="product-image">
+            <div class="img-placeholder">
+              <span class="placeholder-icon">&#128099;</span>
+            </div>
+            <span class="product-badge">Bestseller</span>
+          </div>
+          <div class="product-info">
+            <span class="product-category">Men</span>
+            <h3 class="product-name">Classic Kolhapuri Chappals</h3>
+            <p class="product-desc">Authentic hand-stitched traditional chappals in natural tan leather.</p>
+            <div class="product-footer">
+              <span class="product-price">&#8377;1,299 – &#8377;1,899</span>
+              <button class="btn-enquire" onclick="scrollToContact('Classic Kolhapuri Chappals')">Enquire</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-category="Women">
+          <div class="product-image">
+            <div class="img-placeholder img-pink">
+              <span class="placeholder-icon">&#128100;</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <span class="product-category">Women</span>
+            <h3 class="product-name">Embroidered Juttis</h3>
+            <p class="product-desc">Vibrant hand-embroidered juttis perfect for festivities and weddings.</p>
+            <div class="product-footer">
+              <span class="product-price">&#8377;1,599 – &#8377;2,499</span>
+              <button class="btn-enquire" onclick="scrollToContact('Embroidered Juttis')">Enquire</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-category="Men">
+          <div class="product-image">
+            <div class="img-placeholder img-brown">
+              <span class="placeholder-icon">&#128099;</span>
+            </div>
+            <span class="product-badge new-badge">New</span>
+          </div>
+          <div class="product-info">
+            <span class="product-category">Men</span>
+            <h3 class="product-name">Oxford Leather Formals</h3>
+            <p class="product-desc">Full-grain leather oxfords with memory foam insoles for all-day comfort.</p>
+            <div class="product-footer">
+              <span class="product-price">&#8377;2,999 – &#8377;4,499</span>
+              <button class="btn-enquire" onclick="scrollToContact('Oxford Leather Formals')">Enquire</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-category="Women">
+          <div class="product-image">
+            <div class="img-placeholder img-rose">
+              <span class="placeholder-icon">&#128100;</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <span class="product-category">Women</span>
+            <h3 class="product-name">Block Heel Sandals</h3>
+            <p class="product-desc">Elegant block heels with cushioned footbed, available in 8 colours.</p>
+            <div class="product-footer">
+              <span class="product-price">&#8377;1,999 – &#8377;2,999</span>
+              <button class="btn-enquire" onclick="scrollToContact('Block Heel Sandals')">Enquire</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-category="Kids">
+          <div class="product-image">
+            <div class="img-placeholder img-teal">
+              <span class="placeholder-icon">&#128118;</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <span class="product-category">Kids</span>
+            <h3 class="product-name">Kids Velcro Sneakers</h3>
+            <p class="product-desc">Breathable canvas sneakers with easy velcro straps for active kids.</p>
+            <div class="product-footer">
+              <span class="product-price">&#8377;699 – &#8377;999</span>
+              <button class="btn-enquire" onclick="scrollToContact('Kids Velcro Sneakers')">Enquire</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-category="Unisex">
+          <div class="product-image">
+            <div class="img-placeholder img-olive">
+              <span class="placeholder-icon">&#9733;</span>
+            </div>
+            <span class="product-badge">Premium</span>
+          </div>
+          <div class="product-info">
+            <span class="product-category">Unisex</span>
+            <h3 class="product-name">Leather Loafers</h3>
+            <p class="product-desc">Slip-on loafers crafted from premium calf leather — work or weekend.</p>
+            <div class="product-footer">
+              <span class="product-price">&#8377;3,499 – &#8377;4,999</span>
+              <button class="btn-enquire" onclick="scrollToContact('Leather Loafers')">Enquire</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header light">
+        <p class="section-tag">Why Choose Us</p>
+        <h2 class="section-title">The Bharath Difference</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">&#127981;</div>
+          <h3>Workshop Direct</h3>
+          <p>Buy directly from our workshops. No middlemen — you get the best quality at fair prices.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#9989;</div>
+          <h3>Quality Assured</h3>
+          <p>Every pair passes a 10-point quality check before it leaves our floor. We stand by our craft.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128230;</div>
+          <h3>Pan-India Shipping</h3>
+          <p>We ship across all 28 states. Free shipping on bulk and wholesale orders above &#8377;5,000.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#127775;</div>
+          <h3>Custom Orders</h3>
+          <p>Need a unique design or your brand logo? We accept bulk custom orders with your specifications.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#9851;</div>
+          <h3>Eco-Conscious</h3>
+          <p>Water-based dyes, recycled packaging, and zero-waste workshop practices — good for the planet.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128587;</div>
+          <h3>After-Sales Support</h3>
+          <p>Our team is available 6 days a week to help with sizing, repairs, and replacements.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-tag">What Customers Say</p>
+        <h2 class="section-title">Loved Across India</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"The Kolhapuri chappals I ordered are absolutely stunning. The leather is top quality and they became even more comfortable after a week of wear. Will order again!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">R</div>
+            <div>
+              <strong>Rajesh Patel</strong>
+              <span>Ahmedabad</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card featured-testimonial">
+          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"Ordered 200 pairs of embroidered juttis for our wedding functions. The customization was perfect, delivery was on time, and every guest complimented the footwear. Bharath Footwear is our go-to!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">P</div>
+            <div>
+              <strong>Priya Sharma</strong>
+              <span>Hyderabad — Bulk Order</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"As a boutique owner, I source exclusively from Bharath Footwear. Consistent quality, great designs, and they're always ready to accommodate my custom requirements."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">A</div>
+            <div>
+              <strong>Ananya Krishnan</strong>
+              <span>Bangalore — Retailer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <p class="section-tag">Get In Touch</p>
+          <h2 class="section-title">Let's Talk Footwear</h2>
+          <p>Whether you're looking for retail, bulk orders, or custom designs — our team is ready to help.</p>
+          <div class="contact-details">
+            <div class="contact-item">
+              <span class="contact-icon">&#128205;</span>
+              <div>
+                <strong>Visit Us</strong>
+                <p>No. 45, Leather Street, Anna Nagar,<br />Chennai – 600 040, Tamil Nadu</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">&#128222;</span>
+              <div>
+                <strong>Call Us</strong>
+                <p>+91 98400 12345<br />Mon – Sat, 9 AM – 7 PM</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">&#9993;</span>
+              <div>
+                <strong>Email Us</strong>
+                <p>info@bharathfootwear.in<br />orders@bharathfootwear.in</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="contact-form-wrap">
+          <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
+            <h3>Send an Enquiry</h3>
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input type="text" id="name" name="name" placeholder="e.g. Ravi Kumar" required />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required />
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="+91 9XXXXXXXXX" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="interest">Interested In</label>
+              <select id="interest" name="interest">
+                <option value="">Select a product / category</option>
+                <option>Classic Kolhapuri Chappals</option>
+                <option>Embroidered Juttis</option>
+                <option>Oxford Leather Formals</option>
+                <option>Block Heel Sandals</option>
+                <option>Kids Velcro Sneakers</option>
+                <option>Leather Loafers</option>
+                <option>Bulk / Wholesale Order</option>
+                <option>Custom Design Order</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="4" placeholder="Tell us about your requirement..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary full-width">Send Enquiry</button>
+            <div class="form-success" id="formSuccess">
+              &#10003; Thank you! We'll get back to you within 24 hours.
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#home" class="nav-logo">
+            <span class="logo-icon">&#9670;</span> Bharath Footwear
+          </a>
+          <p>Handcrafted with pride in Chennai since 1985. Every step, a story.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <a href="#about">About Us</a>
+          <a href="#collections">Collections</a>
+          <a href="#features">Why Choose Us</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="footer-links">
+          <h4>Collections</h4>
+          <a href="#collections">Men's Footwear</a>
+          <a href="#collections">Women's Footwear</a>
+          <a href="#collections">Kids' Footwear</a>
+          <a href="#collections">Bulk Orders</a>
+        </div>
+        <div class="footer-contact">
+          <h4>Contact</h4>
+          <p>Chennai, Tamil Nadu</p>
+          <p>+91 98400 12345</p>
+          <p>info@bharathfootwear.in</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Bharath Footwear. All rights reserved. | Made with &#10084; in India</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

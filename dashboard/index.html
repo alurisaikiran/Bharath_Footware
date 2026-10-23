@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bharath Footwear — Business Manager</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <span class="brand-icon">&#9670;</span>
+        <div>
+          <div class="brand-name">Bharath Footwear</div>
+          <div class="brand-sub">Business Manager</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-section="dashboard" onclick="showSection('dashboard')">
+        <span>&#128200;</span> Dashboard
+      </button>
+      <button class="nav-item" data-section="sales" onclick="showSection('sales')">
+        <span>&#128176;</span> Daily Sales
+      </button>
+      <button class="nav-item" data-section="expenses" onclick="showSection('expenses')">
+        <span>&#128203;</span> Expenses
+      </button>
+      <button class="nav-item" data-section="inventory" onclick="showSection('inventory')">
+        <span>&#128230;</span> Inventory
+      </button>
+      <button class="nav-item" data-section="reports" onclick="showSection('reports')">
+        <span>&#128202;</span> Reports
+      </button>
+    </nav>
+    <div class="sidebar-footer">&#10084; Made for Bharath Footwear</div>
+  </aside>
+
+  <!-- OVERLAY for mobile -->
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- MAIN WRAPPER -->
+  <div class="main-wrap">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <button class="hamburger" id="menuToggle" onclick="toggleSidebar()">&#9776;</button>
+      <div class="topbar-center">
+        <span class="topbar-title" id="pageTitle">Dashboard</span>
+      </div>
+      <div class="topbar-date" id="topDate"></div>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+      <!-- ======================== DASHBOARD ======================== -->
+      <section class="section active" id="sec-dashboard">
+
+        <div class="welcome-bar">
+          <div>
+            <div class="welcome-text" id="welcomeText">Good Morning!</div>
+            <div class="welcome-sub">Here's your business summary for today.</div>
+          </div>
+          <button class="btn btn-primary" onclick="showSection('sales')">+ Record Today's Sale</button>
+        </div>
+
+        <!-- Monthly expenses reminder — shown only on the 1st of each month -->
+        <div class="monthly-reminder hidden" id="monthlyReminder">
+          <div class="reminder-icon">&#128197;</div>
+          <div class="reminder-body">
+            <div class="reminder-title">It's the 1st — Time to enter this month's fixed expenses!</div>
+            <div class="reminder-sub" id="reminderSubText">Add your rent, loan EMI, insurance and other fixed monthly costs for this month.</div>
+          </div>
+          <button class="btn btn-reminder" onclick="goToMonthly()">Enter Now &rarr;</button>
+          <button class="reminder-dismiss" onclick="dismissReminder()" title="Dismiss">&#10005;</button>
+        </div>
+
+        <div class="stat-cards" id="dashStats"></div>
+
+        <div class="dash-grid">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">&#128197; Recent Sales</h3>
+              <button class="btn btn-sm btn-ghost" onclick="showSection('sales')">View All</button>
+            </div>
+            <div id="dashRecentSales"><div class="empty-state small">No sales yet this month.</div></div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">&#128203; This Month's Expenses</h3>
+              <button class="btn btn-sm btn-ghost" onclick="showSection('expenses')">View All</button>
+            </div>
+            <div id="dashExpenses"><div class="empty-state small">No expenses recorded.</div></div>
+          </div>
+        </div>
+
+        <div class="card mt-20">
+          <div class="card-header">
+            <h3 class="card-title">&#128230; Low Stock Alert</h3>
+            <button class="btn btn-sm btn-ghost" onclick="showSection('inventory')">View Inventory</button>
+          </div>
+          <div id="dashLowStock"><div class="empty-state small">All products are well stocked.</div></div>
+        </div>
+
+        <!-- WEEKLY AGENT NOTE -->
+        <div class="card mt-20 agent-card">
+          <div class="card-header">
+            <div class="agent-header-left">
+              <span class="agent-badge">&#129302; AI Agent</span>
+              <h3 class="card-title" style="margin-bottom:0">Weekly Business Insight</h3>
+            </div>
+            <div class="agent-header-right">
+              <span class="agent-checked" id="agentLastChecked">Not analysed yet</span>
+              <button class="btn btn-sm btn-agent" onclick="runAgentNow()">&#9654; Run Now</button>
+              <button class="btn btn-sm btn-ghost" onclick="toggleAgentHistory()">&#128196; History</button>
+            </div>
+          </div>
+          <div id="agentInsightContent">
+            <div class="agent-empty">
+              <div style="font-size:2.5rem">&#129302;</div>
+              <p>Your AI agent is ready! Click <strong>Run Now</strong> to get your first business insight.</p>
+              <p style="font-size:0.8rem;color:var(--text-2)">The agent runs automatically every week after that.</p>
+            </div>
+          </div>
+          <div class="agent-history hidden" id="agentHistory">
+            <div class="agent-history-title">&#128196; Past Weekly Notes</div>
+            <div id="agentHistoryList"></div>
+          </div>
+        </div>
+
+        <!-- GOOGLE SHEETS SYNC -->
+        <div class="card mt-20 sync-card">
+          <div class="card-header">
+            <h3 class="card-title" style="margin-bottom:0">&#128196; Sync to Google Sheets</h3>
+            <button class="btn btn-sm btn-sheets" onclick="syncToSheets()">&#128196; Sync Now</button>
+          </div>
+          <div class="sync-setup">
+            <div class="form-group" style="max-width:520px">
+              <label>Google Apps Script Web App URL</label>
+              <input type="url" id="sheetsUrl" value="https://script.google.com/macros/s/AKfycbys_KrMIDLVAlfI_PvOn1JeYfdG5AsuHCyY3qj-tyDAyhtYXlBixUh6LXgkRFPSrTSRUQ/exec" placeholder="Paste your Apps Script Web App URL here" oninput="saveSheetsUrl()" />
+            </div>
+            <div class="sync-help">
+              &#8505; Deploy the <code>apps-script.gs</code> file as a Web App in Google Sheets, then paste the URL above.
+              <span id="syncStatus"></span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ======================== SALES ======================== -->
+      <section class="section" id="sec-sales">
+
+        <div class="card mb-20">
+          <h3 class="card-title" id="saleFormTitle">&#128176; Record Daily Sale</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date <span class="required">*</span></label>
+              <input type="date" id="saleDate" />
+            </div>
+            <div class="form-group">
+              <label>Total Sales Amount (&#8377;) <span class="required">*</span></label>
+              <input type="number" id="saleAmount" placeholder="e.g. 5000" min="0" />
+            </div>
+            <div class="form-group wide">
+              <label>Notes</label>
+              <input type="text" id="saleNotes" placeholder="e.g. Festival rush, 12 pairs sold" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" id="saleSaveBtn" onclick="saveSale()">+ Add Sale</button>
+            <button class="btn btn-ghost hidden" id="saleCancelBtn" onclick="cancelSaleEdit()">Cancel</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Sales History</h3>
+            <div class="filters">
+              <select id="salesMonthFilter" onchange="renderSalesTable()"></select>
+            </div>
+          </div>
+          <div class="summary-bar" id="salesSummaryBar"></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Day</th>
+                  <th class="text-right">Amount (&#8377;)</th>
+                  <th>Notes</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="salesTableBody"></tbody>
+            </table>
+            <div class="empty-state" id="salesEmpty" style="display:none">No sales recorded for this period. Add your first sale above!</div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ======================== EXPENSES ======================== -->
+      <section class="section" id="sec-expenses">
+
+        <div class="tab-bar">
+          <button class="tab-btn active" data-exptab="employee" onclick="showExpenseTab('employee')">&#128100; Employee Pay</button>
+          <button class="tab-btn" data-exptab="bills" onclick="showExpenseTab('bills')">&#129534; Bills &amp; Maintenance</button>
+          <button class="tab-btn" data-exptab="other" onclick="showExpenseTab('other')">&#128204; Other Expenses</button>
+          <button class="tab-btn" data-exptab="monthly" onclick="showExpenseTab('monthly')" id="monthlyTabBtn">&#128197; Monthly Fixed</button>
+        </div>
+
+        <!-- EMPLOYEE PAY -->
+        <div class="exp-tab active" id="exp-employee">
+          <div class="card mb-20">
+            <h3 class="card-title" id="empFormTitle">&#128100; Add Employee Salary</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Employee Name <span class="required">*</span></label>
+                <input type="text" id="empName" placeholder="e.g. Ravi Kumar" />
+              </div>
+              <div class="form-group">
+                <label>Designation</label>
+                <input type="text" id="empRole" placeholder="e.g. Sales Staff" />
+              </div>
+              <div class="form-group">
+                <label>Salary (&#8377;) <span class="required">*</span></label>
+                <input type="number" id="empSalary" placeholder="e.g. 12000" min="0" />
+              </div>
+              <div class="form-group">
+                <label>Month <span class="required">*</span></label>
+                <input type="month" id="empMonth" />
+              </div>
+              <div class="form-group">
+                <label>Status</label>
+                <select id="empStatus">
+                  <option value="paid">&#9989; Paid</option>
+                  <option value="pending">&#9203; Pending</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" id="empSaveBtn" onclick="saveEmployee()">+ Add Record</button>
+              <button class="btn btn-ghost hidden" id="empCancelBtn" onclick="cancelEmpEdit()">Cancel</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Employee Pay Records</h3>
+              <select id="empMonthFilter" onchange="renderEmployeeTable()"></select>
+            </div>
+            <div class="summary-bar" id="empSummaryBar"></div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Employee</th><th>Designation</th><th>Month</th><th class="text-right">Salary (&#8377;)</th><th class="text-center">Status</th><th class="text-center">Actions</th></tr>
+                </thead>
+                <tbody id="empTableBody"></tbody>
+              </table>
+              <div class="empty-state" id="empEmpty" style="display:none">No employee records yet. Add your first employee above!</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BILLS & MAINTENANCE -->
+        <div class="exp-tab" id="exp-bills">
+          <div class="card mb-20">
+            <h3 class="card-title" id="billFormTitle">&#129534; Add Bill / Maintenance</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Bill Type <span class="required">*</span></label>
+                <select id="billType">
+                  <option>Electricity</option>
+                  <option>Water</option>
+                  <option>Shop Rent</option>
+                  <option>Internet / Phone</option>
+                  <option>Equipment Maintenance</option>
+                  <option>Shop Repairs</option>
+                  <option>Insurance</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <input type="text" id="billDesc" placeholder="e.g. June electricity bill" />
+              </div>
+              <div class="form-group">
+                <label>Amount (&#8377;) <span class="required">*</span></label>
+                <input type="number" id="billAmount" placeholder="e.g. 3500" min="0" />
+              </div>
+              <div class="form-group">
+                <label>Date <span class="required">*</span></label>
+                <input type="date" id="billDate" />
+              </div>
+              <div class="form-group">
+                <label>Status</label>
+                <select id="billStatus">
+                  <option value="paid">&#9989; Paid</option>
+                  <option value="pending">&#9203; Pending</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" id="billSaveBtn" onclick="saveBill()">+ Add Bill</button>
+              <button class="btn btn-ghost hidden" id="billCancelBtn" onclick="cancelBillEdit()">Cancel</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Bills &amp; Maintenance History</h3>
+              <select id="billMonthFilter" onchange="renderBillsTable()"></select>
+            </div>
+            <div class="summary-bar" id="billSummaryBar"></div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Type</th><th>Description</th><th>Date</th><th class="text-right">Amount (&#8377;)</th><th class="text-center">Status</th><th class="text-center">Actions</th></tr>
+                </thead>
+                <tbody id="billsTableBody"></tbody>
+              </table>
+              <div class="empty-state" id="billsEmpty" style="display:none">No bills recorded yet.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MONTHLY FIXED EXPENSES -->
+        <div class="exp-tab" id="exp-monthly">
+          <div class="monthly-info-bar">
+            &#128197; Enter your <strong>fixed monthly costs</strong> on the <strong>1st of every month</strong> — rent, loan EMIs, insurance premiums, etc.
+          </div>
+          <div class="card mb-20">
+            <h3 class="card-title" id="monthlyFormTitle">&#128197; Add Monthly Fixed Expense</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Month <span class="required">*</span></label>
+                <input type="month" id="monthlyMonth" />
+              </div>
+              <div class="form-group">
+                <label>Category <span class="required">*</span></label>
+                <select id="monthlyCategory">
+                  <option>Shop Rent</option>
+                  <option>Loan / EMI</option>
+                  <option>Insurance Premium</option>
+                  <option>Staff Advance</option>
+                  <option>Vehicle EMI</option>
+                  <option>Storage / Godown Rent</option>
+                  <option>Festival Bonus</option>
+                  <option>Subscription / Software</option>
+                  <option>Other Fixed Cost</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <input type="text" id="monthlyDesc" placeholder="e.g. April shop rent" />
+              </div>
+              <div class="form-group">
+                <label>Amount (&#8377;) <span class="required">*</span></label>
+                <input type="number" id="monthlyAmount" placeholder="e.g. 15000" min="0" />
+              </div>
+              <div class="form-group">
+                <label>Status</label>
+                <select id="monthlyStatus">
+                  <option value="paid">&#9989; Paid</option>
+                  <option value="pending">&#9203; Pending</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" id="monthlySaveBtn" onclick="saveMonthly()">+ Add Monthly Expense</button>
+              <button class="btn btn-ghost hidden" id="monthlyCancelBtn" onclick="cancelMonthlyEdit()">Cancel</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Monthly Fixed Expense Records</h3>
+              <select id="monthlyMonthFilter" onchange="renderMonthlyTable()"></select>
+            </div>
+            <div class="summary-bar" id="monthlySummaryBar"></div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Month</th><th>Category</th><th>Description</th><th class="text-right">Amount (&#8377;)</th><th class="text-center">Status</th><th class="text-center">Actions</th></tr>
+                </thead>
+                <tbody id="monthlyTableBody"></tbody>
+              </table>
+              <div class="empty-state" id="monthlyEmpty" style="display:none">No monthly fixed expenses recorded yet. Add your first entry above!</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- OTHER EXPENSES -->
+        <div class="exp-tab" id="exp-other">
+          <div class="card mb-20">
+            <h3 class="card-title" id="otherFormTitle">&#128204; Add Other Expense</h3>
+            <div class="form-row">
+              <div class="form-group wide">
+                <label>Description <span class="required">*</span></label>
+                <input type="text" id="otherDesc" placeholder="e.g. Packaging material, transport, supplies" />
+              </div>
+              <div class="form-group">
+                <label>Amount (&#8377;) <span class="required">*</span></label>
+                <input type="number" id="otherAmount" placeholder="e.g. 800" min="0" />
+              </div>
+              <div class="form-group">
+                <label>Date <span class="required">*</span></label>
+                <input type="date" id="otherDate" />
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" id="otherSaveBtn" onclick="saveOther()">+ Add Expense</button>
+              <button class="btn btn-ghost hidden" id="otherCancelBtn" onclick="cancelOtherEdit()">Cancel</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Other Expenses History</h3>
+              <select id="otherMonthFilter" onchange="renderOtherTable()"></select>
+            </div>
+            <div class="summary-bar" id="otherSummaryBar"></div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Description</th><th>Date</th><th class="text-right">Amount (&#8377;)</th><th class="text-center">Actions</th></tr>
+                </thead>
+                <tbody id="otherTableBody"></tbody>
+              </table>
+              <div class="empty-state" id="otherEmpty" style="display:none">No other expenses recorded yet.</div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ======================== INVENTORY ======================== -->
+      <section class="section" id="sec-inventory">
+
+        <div class="card mb-20">
+          <h3 class="card-title" id="invFormTitle">&#128230; Add Product to Inventory</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Product Name <span class="required">*</span></label>
+              <input type="text" id="invName" placeholder="e.g. Kolhapuri Chappals" />
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select id="invCategory">
+                <option>Men</option>
+                <option>Women</option>
+                <option>Kids</option>
+                <option>Unisex</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Size / Type</label>
+              <input type="text" id="invSize" placeholder="e.g. UK 7, S/M/L" />
+            </div>
+            <div class="form-group">
+              <label>Quantity (pairs) <span class="required">*</span></label>
+              <input type="number" id="invQty" placeholder="e.g. 50" min="0" />
+            </div>
+            <div class="form-group">
+              <label>Buy Price (&#8377;)</label>
+              <input type="number" id="invBuyPrice" placeholder="e.g. 800" min="0" />
+            </div>
+            <div class="form-group">
+              <label>Sell Price (&#8377;)</label>
+              <input type="number" id="invSellPrice" placeholder="e.g. 1299" min="0" />
+            </div>
+            <div class="form-group">
+              <label>Reorder Level</label>
+              <input type="number" id="invReorder" placeholder="e.g. 10" min="0" value="10" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" id="invSaveBtn" onclick="saveInventoryItem()">+ Add to Inventory</button>
+            <button class="btn btn-ghost hidden" id="invCancelBtn" onclick="cancelInvEdit()">Cancel</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Current Stock</h3>
+            <div class="inv-legend">
+              <span class="badge badge-green">In Stock</span>
+              <span class="badge badge-yellow">Low Stock</span>
+              <span class="badge badge-red">Out of Stock</span>
+            </div>
+          </div>
+          <div class="summary-bar" id="invSummaryBar"></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Size</th>
+                  <th class="text-right">Qty</th>
+                  <th class="text-right">Buy &#8377;</th>
+                  <th class="text-right">Sell &#8377;</th>
+                  <th class="text-right">Margin</th>
+                  <th class="text-center">Status</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="invTableBody"></tbody>
+            </table>
+            <div class="empty-state" id="invEmpty" style="display:none">No products in inventory yet. Add your stock above!</div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ======================== REPORTS ======================== -->
+      <section class="section" id="sec-reports">
+
+        <div class="card mb-20">
+          <div class="card-header">
+            <h3 class="card-title">&#128202; Yearly Report</h3>
+            <select id="reportYear" onchange="renderReports()"></select>
+          </div>
+          <div class="stat-cards" id="reportYearStats"></div>
+        </div>
+
+        <div class="card mb-20">
+          <h3 class="card-title">Monthly Breakdown</h3>
+          <div class="table-wrap">
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th class="text-right">Sales (&#8377;)</th>
+                  <th class="text-right">Employee Pay</th>
+                  <th class="text-right">Bills</th>
+                  <th class="text-right">Monthly Fixed</th>
+                  <th class="text-right">Other</th>
+                  <th class="text-right">Total Expenses</th>
+                  <th class="text-right">Net Profit</th>
+                </tr>
+              </thead>
+              <tbody id="reportTableBody"></tbody>
+              <tfoot id="reportTableFoot"></tfoot>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Sales vs Expenses — Monthly Chart</h3>
+          <div class="chart-legend">
+            <span class="legend-dot green"></span> Sales &nbsp;&nbsp;
+            <span class="legend-dot red"></span> Expenses
+          </div>
+          <div class="bar-chart-wrap" id="barChart"></div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- QTY EDIT MODAL -->
+  <div class="modal-backdrop" id="qtyModal" style="display:none">
+    <div class="modal">
+      <h3>Update Stock Quantity</h3>
+      <p id="qtyModalProduct"></p>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="adjustQty(-1)">&#8722;</button>
+        <input type="number" id="qtyInput" min="0" />
+        <button class="qty-btn" onclick="adjustQty(1)">&#43;</button>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" onclick="saveQty()">Save</button>
+        <button class="btn btn-ghost" onclick="closeQtyModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
