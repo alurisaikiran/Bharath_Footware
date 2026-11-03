@@ -1268,6 +1268,54 @@ function saveSheetsUrl() {
   localStorage.setItem('bf_sheets_url', url);
 }
 
+async function loadFromSheets() {
+  const url = (document.getElementById('sheetsUrl').value.trim()) || localStorage.getItem('bf_sheets_url') || '';
+  const statusEl = document.getElementById('syncStatus');
+
+  if (!url) {
+    toast('Please enter your Google Apps Script URL first.', 'error');
+    return;
+  }
+
+  if (statusEl) { statusEl.textContent = '⏳ Loading from Sheets...'; statusEl.className = ''; }
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.status === 'error') {
+      toast('Error: ' + (data.message || 'Unknown error'), 'error');
+      if (statusEl) { statusEl.textContent = '❌ Load failed'; statusEl.className = 'fail'; }
+      return;
+    }
+
+    if (!data.sales && !data.emp && !data.inv) {
+      toast('No data found in Sheets yet. Ask your family to press "Sync Now" on their device first.', 'error');
+      if (statusEl) { statusEl.textContent = '⚠️ No data in Sheets'; statusEl.className = 'fail'; }
+      return;
+    }
+
+    // Write directly to localStorage to avoid triggering auto-sync loop
+    if (data.sales)   localStorage.setItem(DB.KEYS.SALES,   JSON.stringify(data.sales));
+    if (data.emp)     localStorage.setItem(DB.KEYS.EMP,     JSON.stringify(data.emp));
+    if (data.bills)   localStorage.setItem(DB.KEYS.BILLS,   JSON.stringify(data.bills));
+    if (data.monthly) localStorage.setItem(DB.KEYS.MONTHLY, JSON.stringify(data.monthly));
+    if (data.other)   localStorage.setItem(DB.KEYS.OTHER,   JSON.stringify(data.other));
+    if (data.inv)     localStorage.setItem(DB.KEYS.INV,     JSON.stringify(data.inv));
+
+    toast('Data loaded from Google Sheets! Dashboard updated.', 'success');
+    if (statusEl) {
+      statusEl.textContent = '✅ Loaded: ' + new Date().toLocaleTimeString('en-IN');
+      statusEl.className = 'ok';
+    }
+
+    renderDashboard();
+  } catch (err) {
+    toast('Could not reach Google Sheets. Check the URL and try again.', 'error');
+    if (statusEl) { statusEl.textContent = '❌ Load failed'; statusEl.className = 'fail'; }
+  }
+}
+
 async function syncToSheets() {
   const url = document.getElementById('sheetsUrl').value.trim() || localStorage.getItem('bf_sheets_url') || '';
   const statusEl = document.getElementById('syncStatus');

@@ -137,7 +137,10 @@
         <div class="card mt-20 sync-card">
           <div class="card-header">
             <h3 class="card-title" style="margin-bottom:0">&#128196; Sync to Google Sheets</h3>
-            <button class="btn btn-sm btn-sheets" onclick="syncToSheets()">&#128196; Sync Now</button>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-sm btn-sheets" onclick="syncToSheets()">&#128196; Sync Now</button>
+              <button class="btn btn-sm" style="background:var(--green);color:#fff" onclick="loadFromSheets()">&#8681; Load from Sheets</button>
+            </div>
           </div>
           <div class="sync-setup">
             <div class="form-group" style="max-width:520px">

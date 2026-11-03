@@ -23,7 +23,8 @@ var SHEET = {
   MONTHLY   : '📅 Monthly Fixed',
   OTHER     : '📌 Other Expenses',
   INV       : '📦 Inventory',
-  INSIGHTS  : '🤖 Weekly Insights'
+  INSIGHTS  : '🤖 Weekly Insights',
+  RAW       : 'Raw Backup'
 };
 
 // ---- COLORS ----
@@ -71,6 +72,12 @@ function doPost(e) {
 
     writeDashboardSummary(ss);
 
+    // Save raw JSON backup so doGet can return it to other devices
+    ensureSheet(ss, SHEET.RAW);
+    var rawSheet = ss.getSheetByName(SHEET.RAW);
+    rawSheet.getRange('A1').setValue(raw);
+    try { rawSheet.hideSheet(); } catch(ignore) {}
+
     return ContentService
       .createTextOutput(JSON.stringify({ status: 'success', message: 'Synced successfully!' }))
       .setMimeType(ContentService.MimeType.JSON);
@@ -82,11 +89,29 @@ function doPost(e) {
   }
 }
 
-// Allow GET requests (for testing the URL is live)
+// GET — returns the latest data snapshot so other devices can load it
 function doGet(e) {
-  return ContentService
-    .createTextOutput(JSON.stringify({ status: 'ok', message: 'Bharath Footwear App Script is running!' }))
-    .setMimeType(ContentService.MimeType.JSON);
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var rawSheet = ss.getSheetByName(SHEET.RAW);
+    if (rawSheet) {
+      var raw = rawSheet.getRange('A1').getValue();
+      if (raw) {
+        var data = JSON.parse(raw);
+        data.status = 'ok';
+        return ContentService
+          .createTextOutput(JSON.stringify(data))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+    }
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: 'ok', message: 'No data synced yet. Ask your family to sync first.' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: 'error', message: err.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
 }
 
 
