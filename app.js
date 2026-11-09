@@ -1290,8 +1290,12 @@ async function loadFromSheets() {
     }
 
     if (!data.sales && !data.emp && !data.inv) {
-      toast('No data found in Sheets yet. Ask your family to press "Sync Now" on their device first.', 'error');
-      if (statusEl) { statusEl.textContent = '⚠️ No data in Sheets'; statusEl.className = 'fail'; }
+      const serverMsg = data.message || '';
+      const userMsg = serverMsg
+        ? 'Google Sheets has no data yet. Have your family open the app, enter their data, then tap "Sync Now". ' + serverMsg
+        : 'No data found in Google Sheets. Have your family open the app and tap "Sync Now" first, then try loading again.';
+      toast(userMsg, 'error');
+      if (statusEl) { statusEl.textContent = '⚠️ No data in Sheets — family must Sync Now first'; statusEl.className = 'fail'; }
       return;
     }
 
@@ -1348,13 +1352,33 @@ async function syncToSheets() {
       body:    JSON.stringify(payload),
       mode:    'no-cors'
     });
-    toast('Synced to Google Sheets successfully!', 'success');
-    statusEl.textContent = '✅ Last synced: ' + new Date().toLocaleTimeString('en-IN');
-    statusEl.className   = 'ok';
   } catch (err) {
     toast('Sync failed. Check your Web App URL.', 'error');
     statusEl.textContent = '❌ Sync failed';
     statusEl.className   = 'fail';
+    return;
+  }
+
+  // Verify the sync actually reached Google Sheets by reading back after a delay
+  statusEl.textContent = '⏳ Verifying sync...';
+  await new Promise(r => setTimeout(r, 3000));
+
+  try {
+    const verifyRes  = await fetch(url);
+    const verifyData = await verifyRes.json();
+    if (verifyData.sales !== undefined || verifyData.emp !== undefined || verifyData.inv !== undefined) {
+      toast('Synced to Google Sheets — verified! Other devices can now load this data.', 'success');
+      statusEl.textContent = '✅ Synced & verified: ' + new Date().toLocaleTimeString('en-IN');
+      statusEl.className   = 'ok';
+    } else {
+      toast('Data was sent but could not be verified in Sheets. Your Apps Script may need to be re-deployed.', 'error');
+      statusEl.textContent = '⚠️ Sent but not confirmed — re-deploy Apps Script';
+      statusEl.className   = 'fail';
+    }
+  } catch (err) {
+    toast('Sync sent (could not verify). Try "Load from Sheets" to confirm it worked.', 'success');
+    statusEl.textContent = '✅ Sync sent (unverified): ' + new Date().toLocaleTimeString('en-IN');
+    statusEl.className   = 'ok';
   }
 }
 
